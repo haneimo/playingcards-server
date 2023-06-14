@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "io-ts": "^2.2.20",
     "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.5"
   }
 }
