@@ -57,5 +57,4 @@ const ioTsCard = t.type({
 type card = t.TypeOf<typeof ioTsCard>;
 export class Card implements card {
     constructor(public suit:Suit, public value:CardNumber){}
-    
 }
