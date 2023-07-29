@@ -1,6 +1,7 @@
 import * as t from "io-ts";
 import {Suit} from "./Suit";
 import {CardNumber} from "./CardNumber";
+import {CardVisibility} from "./CardVisibility";
 
 const ioTsCardSuit = t.union([
     t.literal(Suit.Spade), //Spade
@@ -26,12 +27,19 @@ const ioTsCardValue = t.union([
     t.literal(CardNumber.K)
 ]);
 
+const ioTsCardVisibility = t.union([
+    t.literal(CardVisibility.FACE_UP),
+    t.literal(CardVisibility.FACE_DOWN),
+    t.literal(CardVisibility.HAND)
+]);
+
 const ioTsCard = t.type({
   suit: ioTsCardSuit,
-  value: ioTsCardValue
+  value: ioTsCardValue,
+  visibility: ioTsCardVisibility,
 });
 
 type card = t.TypeOf<typeof ioTsCard>;
 export class Card implements card {
-    constructor(public suit:Suit, public value:CardNumber){}
+    constructor(public suit:Suit, public value:CardNumber, public visibility:CardVisibility = CardVisibility.FACE_DOWN){}
 }

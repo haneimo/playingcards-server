@@ -1,5 +1,3 @@
-import * as t from "io-ts";
-
 export const CardNumber = {
     A: 'A',
     N2: '2',
