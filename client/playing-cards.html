@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser 3 トランプカード表示</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser/dist/phaser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // Phaserのセットアップ
+        var config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            parent: 'game-container',
+            scene: {
+                preload: preload,
+                create: create
+            }
+        };
+
+        var game = new Phaser.Game(config);
+
+        // カードのプリロード
+        function preload() {
+            const self = this;
+            function loadWith(skinName) {
+                SUITS = ['spade', 'heart', 'club', 'diamond']
+                NUMBERS = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13']
+                for (const suit of SUITS) {
+                    for (const num of NUMBERS) {
+                        const simbol = 'card_' + suit + '_' + num;
+                        const path = './assets/skins/' + skinName + '/card_' + suit + '_' + num + '.png';
+                        console.log(path)
+                        self.load.image(simbol, path);
+                    }
+                }
+            }
+            loadWith('irasutoya');
+        }
+
+        // カードの作成と表示
+        function create() {
+            const centerX = 400; // アーチの中心X座標
+            const centerY = 300; // アーチの中心Y座標
+            const radius = 200; // アーチの半径
+            const angleStep = Phaser.Math.PI2 / 4; // 各カードの間の角度差
+
+            const suits = ['spade', 'heart', 'diamond', 'club'];
+            const numbers = ['01', '02', '03', '04'];
+            const cards = [];
+
+            // カードを作成して配列に追加
+            for (let i = 0; i < suits.length; i++) {
+                for (let j = 0; j < numbers.length; j++) {
+                    const cardKey = 'card_' + suits[i] + '_' + numbers[j];
+                    const card = this.add.sprite(0, 0, cardKey).setDisplaySize(120, 180);
+                    card.setOrigin(0.5, 1); // スプライトの原点を底辺の中央に設定
+                    cards.push(card);
+                }
+            }
+
+            // カードをアーチ状に配置
+            const totalCards = cards.length;
+            const startAngle = -Math.PI / 4; // アーチの開始角度
+            const angleOffset = Phaser.Math.PI2 / 8; // カードの開始角度オフセット
+            for (let i = 0; i < totalCards; i++) {
+                const angle = startAngle + angleOffset + i * angleStep;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                cards[i].setPosition(x, y);
+                cards[i].setRotation(angle - Math.PI / 2); // カードを回転させる
+            }
+        }
+
+
+    </script>
+    <div id="game-container"></div>
+</body>
+
+</html>

@@ -8,6 +8,3 @@ export const Suit = {
     Joker: 'J'
 } as const;
 export type Suit = typeof Suit[keyof typeof Suit];
-
-
-

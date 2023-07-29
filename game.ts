@@ -1,7 +1,9 @@
 import { Card} from './lib/Card';
+import { CardList } from './lib/CardList';
 import { CardNumber } from './lib/CardNumber';
 import { Suit } from './lib/Suit';
 import {computerShuffle} from './lib/shuffle';
+import { generateCardDeck } from './lib/util';
 
 export type User = {
     id:string, //一意に特定できるのであれば任意の数字
@@ -16,18 +18,14 @@ type Player = User & {
 export type GameInfomation = {
     players:Player[],
     stock:Card[], 
-    stockCount?:number 
 };
 
-// 1回1回ゲームオブジェクトは捨てる
-// もし次のゲームに引き継ぐべき情報がある場合はconstructorで指定させる。
-// 点計算周りどうしようかな・・・。
 export class GameBase {
-    protected stock:Card[] = []
+    protected stock:CardList;
     protected players = new Map<string, Player>();
     // カードセットは順序を持たないといけない
     constructor(users:User[]=[]) {
-        this.generateCardStock()
+        this.stock = generateCardDeck()
         for(const user of users){
             this.players.set(
                 user.id, 
@@ -43,7 +41,6 @@ export class GameBase {
     showGameInfomation(userId?: number):GameInfomation{
         return {
             stock: this.stock,
-            stockCount: this.stock.length,
             players: Array.from(this.players.values()) //idのマスキングはあとで。
         };
     }
