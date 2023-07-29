@@ -1,5 +1,7 @@
-import {Card, Suit, CardNumber} from './cards';
-import {computerShuffle} from './shuffle';
+import { Card} from './lib/Card';
+import { CardNumber } from './lib/CardNumber';
+import { Suit } from './lib/Suit';
+import {computerShuffle} from './lib/shuffle';
 
 export type User = {
     id:string, //一意に特定できるのであれば任意の数字
@@ -53,19 +55,4 @@ export class GameBase {
         }
     }
 
-    generateCardStock(){
-        const c:Card[] = [Suit.Spade, Suit.Hart, Suit.Diamond, Suit.Club].map( (suit:Suit):Card[] => { 
-            return Object.values(CardNumber).map( (num:CardNumber):Card => {
-                return new Card(suit, num);
-            })
-        }).flat();
-
-        const j:Card[] = [
-            new Card(Suit.Joker, CardNumber.A),
-            new Card(Suit.Joker, CardNumber.N2)
-        ];
-        
-        this.stock = c.concat(j);
-        this.stock = computerShuffle(this.stock);
-    }
 }

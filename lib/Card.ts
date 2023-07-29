@@ -1,13 +1,6 @@
 import * as t from "io-ts";
-
-export const Suit = {
-    Spade: 'S',
-    Hart: 'H',
-    Diamond: 'D',
-    Club: 'C',
-    Joker: 'J'
-} as const;
-export type Suit = typeof Suit[keyof typeof Suit];
+import {Suit} from "./Suit";
+import {CardNumber} from "./CardNumber";
 
 const ioTsCardSuit = t.union([
     t.literal(Suit.Spade), //Spade
@@ -16,23 +9,6 @@ const ioTsCardSuit = t.union([
     t.literal(Suit.Club), //Club
     t.literal(Suit.Joker) //
 ]);
-
-export const CardNumber = {
-    A: 'A',
-    N2: '2',
-    N3: '3',
-    N4: '4',
-    N5: '5',
-    N6: '6',
-    N7: '7',
-    N8: '8',
-    N9: '9',
-    N10: '10',
-    J: 'J',
-    Q: 'Q',
-    K: 'K'
-} as const;
-export type CardNumber = typeof CardNumber[keyof typeof CardNumber];
 
 const ioTsCardValue = t.union([
     t.literal(CardNumber.A),
@@ -49,6 +25,7 @@ const ioTsCardValue = t.union([
     t.literal(CardNumber.Q),
     t.literal(CardNumber.K)
 ]);
+
 const ioTsCard = t.type({
   suit: ioTsCardSuit,
   value: ioTsCardValue
