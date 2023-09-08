@@ -1,13 +1,20 @@
-import { Card} from './lib/Card';
-import { CardList } from './lib/CardList';
-import { CardNumber } from './lib/CardNumber';
-import { Suit } from './lib/Suit';
-import {computerShuffle} from './lib/shuffle';
-import { generateCardDeck } from './lib/util';
+import { Card} from './Card';
+import { CardList } from './CardList';
+import { CardNumber } from './CardNumber';
+import { Suit } from './Suit';
+import {computerShuffle} from './shuffle';
+import { generateCardDeck } from './util';
+
+type PLAYER = "PLAYER"
+type GAME_MASTER = "GAME_MASTER"
+type OBSERVER = "OBSERVER"
+type ALL_SEEING_OBSERVER = "ALL_SEEING_OBSERVER"
+type UserRoll = PLAYER | GAME_MASTER | OBSERVER | ALL_SEEING_OBSERVER
 
 export type User = {
     id:string, //一意に特定できるのであれば任意の数字
     name:string 
+    roll:UserRoll
 };
 
 type Player = User & {
@@ -24,7 +31,7 @@ export class GameBase {
     protected stock:CardList;
     protected players = new Map<string, Player>();
     // カードセットは順序を持たないといけない
-    constructor(users:User[]=[]) {
+    constructor(playerIds) {
         this.stock = generateCardDeck()
         for(const user of users){
             this.players.set(
@@ -32,6 +39,16 @@ export class GameBase {
                 Object.assign(user,{ hands:[]})
             );
         }
+    }
+
+    // userを登録する
+    entryUser(id, name, roll):void {
+
+    }
+
+    // ゲームをリセットするためのコマンド
+    reset():void {
+
     }
 
     // 現時点の場/手札の情報を表示する
