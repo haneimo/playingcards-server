@@ -1,71 +1,68 @@
-var blessed = require('blessed');
- 
-// Create a screen object.
-var screen = blessed.screen({
-  smartCSR: true
-});
- 
-screen.title = 'my window title';
+const tiles = require('./tiles.js');
+const readlineSync = require('readline-sync');
 
-// Create a box perfectly centered horizontally and vertically.
-var box = blessed.box({
-  top: 'center',
-  left: 'center',
-  width: '50%',
-  height: '50%',
-  content: 'Hello {bold}world{/bold}!',
-  tags: true,
-  border: {
-    type: 'line'
-  },
-  style: {
-    fg: 'white',
-    bg: 'magenta',
-    border: {
-      fg: '#f0f0f0'
-    },
-    hover: {
-      bg: 'green'
-    }
+// node mahjong-cui.js で実行すると、対話的に麻雀をプレイできる
+// 自分が入力可能な時（ポン/チー/カン/ツモ切り/ロン)にのみブロッキング処理が走り、
+// 入力を受け付ける。入出力は標準出力とする。
+
+PASS_COMMAND = {
+  type:"PASS",
+  targetTile:"",
+  message:"パスしますか？",
+  choices:["pass"]
+}
+
+//sample commands
+PONG_COMMAND = {
+  type:"PONG",
+  targetTile:"1m",
+  message:"ポンしますか？",
+  choices:["pong"]
+}
+
+CHOW_COMMAND = {
+  type:"CHOW",
+  targetTile:"1m",
+  message:"チーしますか？",
+  choices:["chow"]
+}
+
+KONG_COMMAND = {
+  type:"KONG",
+  targetTile:"1m",
+  message:"カンしますか？",
+  choices:["kong"]
+}
+
+RONG_COMMAND = {
+  type:"RONG",
+  targetTiles:["1m"],
+  message:"ロンしますか？",
+  choices:["rong"]
+}
+
+THROW_COMMAND = {
+  type:"THROW",
+  targetTiles:["1m","2m","3m","5m","6m","2s","4s","5s","1p","2p","dr","dr","wn","ws"],
+  message:"捨てる牌を選んでください",
+  choices:["throw"]
+}
+
+ZIMO_COMMAND = {
+  type:"ZIMO",
+  targetTiles:["1m"],
+  message:"ツモあがりしますか？",
+  choices:["throw","zimo","kong"]
+}
+
+
+function main(){
+  let gameInfomation = {
+    playableCommand:PONG_COMMAND
   }
-});
- 
-// Append our box to the screen.
-screen.append(box);
- 
-// Add a png icon to the box
-var icon = blessed.image({
-  parent: box,
-  top: 0,
-  left: 0,
-  type: 'overlay',
-  width: 'shrink',
-  height: 'shrink',
-  file: __dirname + '/my-program-icon.png',
-  search: false
-});
- 
-// If our box is clicked, change the content.
-box.on('click', function(data) {
-  box.setContent('{center}Some different {red-fg}content{/red-fg}.{/center}');
-  screen.render();
-});
- 
-// If box is focused, handle `enter`/`return` and give us some more content.
-box.key('enter', function(ch, key) {
-  box.setContent('{right}Even different {black-fg}content{/black-fg}.{/right}\n');
-  box.setLine(1, 'bar');
-  box.insertLine(1, 'foo');
-  screen.render();
-});
- 
-// Quit on Escape, q, or Control-C.
-screen.key(['escape', 'q', 'C-c'], function(ch, key) {
-  return process.exit(0);
-});
- 
-// Focus our element.
-box.focus();
- 
-// Render the screen.
-screen.render();
+
+  console.log(JSON.stringify(gameInfomation));
+  let answer = readlineSync.question();
+}
+
+main()
